@@ -1,0 +1,34 @@
+-- OPTIONAL — Advanced scaling note, not part of the standard migration path.
+--
+-- leaderboard_normalized (002) computes percent_rank() live, over every row
+-- in a department, on every leaderboard fetch. That's fine up to roughly
+-- tens of thousands of students per department — Postgres window functions
+-- over that size are still fast. Past that, or if you're fetching the
+-- Campus board very frequently at high traffic, computing percent_rank()
+-- live on every request starts showing up in query latency.
+--
+-- If you hit that point, the standard fix is a materialized view refreshed
+-- on a schedule (e.g. every 5 minutes) instead of computed live:
+--
+--   create materialized view leaderboard_normalized_cached as
+--     select * from leaderboard_normalized;
+--
+--   create unique index on leaderboard_normalized_cached (id);
+--
+--   -- Requires the pg_cron extension (Database -> Extensions in the
+--   -- Supabase dashboard):
+--   select cron.schedule(
+--     'refresh-leaderboard',
+--     '*/5 * * * *',
+--     $$ refresh materialized view concurrently leaderboard_normalized_cached $$
+--   );
+--
+-- Then point the client's Faculty/Campus queries at
+-- leaderboard_normalized_cached instead of leaderboard_normalized. The
+-- trade-off: rankings become up to ~5 minutes stale instead of perfectly
+-- live, in exchange for consistent query performance at scale.
+--
+-- We're documenting this rather than applying it by default because (a) not
+-- all Supabase plans have pg_cron available, and (b) at the scale most
+-- pilots launch at, the live version is simpler and plenty fast. Revisit
+-- this once you have real traffic data suggesting it's needed.

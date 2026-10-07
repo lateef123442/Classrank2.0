@@ -1,0 +1,39 @@
+# Secrets — never commit these
+.env
+.env.local
+.env.*.local
+google-service-account.json
+
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native build output
+ios/
+android/
+
+# Metro
+.metro-health-check*
+
+# Testing
+coverage/
+
+# Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.log
+
+# macOS
+.DS_Store
+
+# EAS
+.eas/
+
+# TypeScript
+*.tsbuildinfo

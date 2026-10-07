@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "ClassRank",
+    "slug": "classrank-app",
+    "scheme": "classrank",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "description": "Every department. One leaderboard. Daily quizzes and fair, cross-department rankings for university students.",
+    "primaryColor": "#14B8A6",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.classrank.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "ClassRank does not track you across other apps or websites. This permission (if shown) is a side effect of a bundled SDK's default configuration, not an intentional tracking request.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.classrank.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#10162C"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-notifications",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "backgroundColor": "#10162C",
+          "imageWidth": 200
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "2cf880bb-d652-4005-bc55-38e76d52e73b"
+      }
+    },
+    "owner": "ahmedabdullateef12345",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2cf880bb-d652-4005-bc55-38e76d52e73b"
+    },
+    "icon": "./assets/icon.png"
+  }
+}
