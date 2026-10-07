@@ -380,7 +380,7 @@ resolved to a real referrer **server-side**, in `complete_student_signup`
 — never trust a client-supplied "who referred me" value, since that would
 let anyone fabricate a referral for free points.
 
-**The honest scope, matching what the original business plan actually
+**The hones6t scope, matching what the original business plan actually
 needed vs. what's actually built:**
 
 - ✅ **Vesting delay** — the referrer isn't paid until the referred student
