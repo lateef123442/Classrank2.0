@@ -32,6 +32,8 @@ import { LoadingScreen } from "../components/animated/Loader";
 import CommunityScreen from "../screens/community/CommunityScreen";
 import CoursesScreen from "../screens/community/CoursesScreen";
 import CourseDetailScreen from "../screens/community/CourseDetailScreen";
+import CourseDailyQuizScreen from "../screens/CourseDailyQuizScreen";
+import CoursePracticeScreen from "../screens/CoursePracticeScreen";
 import GroupsScreen from "../screens/community/GroupsScreen";
 import GroupDetailScreen from "../screens/community/GroupDetailScreen";
 import GroupQuizScreen from "../screens/community/GroupQuizScreen";
@@ -50,13 +52,15 @@ export type RootStackParamList = {
   Planner: undefined;
   Cards: undefined;
   Progress: undefined;
-  Companion: { prompt?: string } | undefined;
+  Companion: { prompt?: string; courseId?: string; topicId?: string; topicTitle?: string } | undefined;
   PracticeSession: { mode: "quick" | "topic" | "subject" | "mock" | "daily"; subjectId?: string; topicId?: string };
   Subject: { subjectId: string };
   StudySetup: undefined;
   Community: undefined;
   Courses: undefined;
   Course: { courseId: string };
+  CourseDailyQuiz: { courseId: string };
+  CoursePractice: { courseId: string; topicId?: string };
   Groups: undefined;
   Group: { groupId: string };
   GroupQuiz: { quizId: string };
@@ -72,7 +76,6 @@ export type MainTabParamList = {
   Practice: undefined;
   Study: { subject?: string; notes?: string } | undefined;
   Leaderboard: undefined;
-  // Still registered (Home/Practice link to them) but hidden from the tab bar to keep it to six items.
   Quiz: undefined;
   Feed: undefined;
   Profile: undefined;
@@ -208,10 +211,6 @@ export default function RootNavigator() {
 
   if (initializing || !onboardingChecked) return <LoadingScreen />;
 
-  // Takes priority over everything else: the session Supabase just
-  // established from a password-reset deep link is a special recovery
-  // session, not a normal login. Show the "set new password" screen
-  // regardless of role or auth state until that's resolved.
   if (passwordRecoveryMode) {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -222,9 +221,6 @@ export default function RootNavigator() {
 
   const isAuthenticated = !!session && !!profile;
 
-  // Only shown to signed-out, first-time users — an already-authenticated
-  // user (e.g. reopening the app) never sees marketing slides again
-  // regardless of the stored flag.
   if (!isAuthenticated && !hasSeenOnboarding) {
     return <OnboardingCarousel onDone={() => setHasSeenOnboarding(true)} />;
   }
@@ -256,6 +252,8 @@ export default function RootNavigator() {
           <Stack.Screen name="Community" component={CommunityScreen} />
           <Stack.Screen name="Courses" component={CoursesScreen} />
           <Stack.Screen name="Course" component={CourseDetailScreen} />
+          <Stack.Screen name="CourseDailyQuiz" component={CourseDailyQuizScreen} />
+          <Stack.Screen name="CoursePractice" component={CoursePracticeScreen} />
           <Stack.Screen name="Groups" component={GroupsScreen} />
           <Stack.Screen name="Group" component={GroupDetailScreen} />
           <Stack.Screen name="GroupQuiz" component={GroupQuizScreen} options={{ animation: "fade_from_bottom", gestureEnabled: false }} />
